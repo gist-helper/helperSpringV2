@@ -39,16 +39,4 @@ public class Meal {
     private String menu;
     @Column
     private String special;
-
-    public String generateMenu() {
-        String menu = "";
-        menu += this.date + " " + this.kind + "\n\n";
-        menu += this.bldg + "\n\n";
-        menu += this.menu;
-        if(kindType == 1) {
-            menu += "\n\\코너\\\n";
-            menu += this.special;
-        }
-        return menu;
-    }
 }

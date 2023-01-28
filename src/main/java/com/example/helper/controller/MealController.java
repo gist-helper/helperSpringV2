@@ -4,7 +4,6 @@ import com.example.helper.entity.Meal;
 import com.example.helper.service.MealService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,76 +48,182 @@ public class MealController {
     }
 
     @PostMapping("/kor")
-    public Map<String, Object> readKorMeal() throws JsonProcessingException {
+    public @ResponseBody String readKorMeal() throws JsonProcessingException {
         // input  : None (먼저 서버에서 현재 시간 측정)
         // output : 한국어 식단이 포함된 JSON (단, JSON은 카톡 서버가 받을 수 있는 형식이여야 함.)
 
+        // TODO 아래 기능 구현해 주세요.
         String nowMeal = mealService.getNowKorMeal();
-        Map<String, Object> responseBody = mealService.responseMeal(nowMeal);
 
-        // if need to stratify.
-        // ObjectMapper objectMapper = new ObjectMapper();
-        // String result = objectMapper.writeValueAsString(responseBody);
+        // Response Body Construct
+        // TODO 더 좋은 방식이 있으면 구현해 주세요. ex) dto 이용.
+        // const responseBody = {
+        //          version: "2.0",
+        //          template: {
+        //              outputs: [
+        //                          {
+        //                              simpleText: {
+        //                                      text: nowMeal
+        //                                  }
+        //                           }
+        //                        ]
+        //                     }
+        //                  };
 
-        return responseBody;
+        Map<String, Object> simpleText =  new HashMap<>();
+        simpleText.put("text", nowMeal);
+
+        Map<String, Object> simpleTextWrapper = new HashMap<>();
+        simpleTextWrapper.put("simpleText", simpleText);
+
+        List<Object> outputs = new ArrayList(1);
+        outputs.add(simpleTextWrapper);
+
+        Map<String, Object> template = new HashMap<>();
+        template.put("outputs", outputs);
+
+        Map<String, Object> responseBody = new HashMap<>();
+        responseBody.put("version", "2.0");
+        responseBody.put("template", template);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String result = objectMapper.writeValueAsString(responseBody);
+
+        return result;
     }
 
     @PostMapping("/eng")
-    public Map<String, Object> readEngMeal() throws JsonProcessingException {
+    public @ResponseBody String readEngMeal() throws JsonProcessingException {
         // input  : None (먼저 서버에서 현재 시간 측정)
         // output : 영어 식단이 포함된 JSON (단, JSON은 카톡 서버가 받을 수 있는 형식이여야 함.)
 
+        // TODO 아래 기능 구현해 주세요.
         String nowMeal = mealService.getNowEngMeal();
-        Map<String, Object> responseBody = mealService.responseMeal(nowMeal);
 
-        // if need to stratify.
-        // ObjectMapper objectMapper = new ObjectMapper();
-        // String result = objectMapper.writeValueAsString(responseBody);
+        // Response Body Construct
+        // TODO 더 좋은 방식이 있으면 구현해 주세요. ex) dto 이용.
+        // const responseBody = {
+        //          version: "2.0",
+        //          template: {
+        //              outputs: [
+        //                          {
+        //                              simpleText: {
+        //                                      text: nowMeal
+        //                                  }
+        //                           }
+        //                        ]
+        //                     }
+        //                  };
 
-        return responseBody;
+        Map<String, Object> simpleText =  new HashMap<>();
+        simpleText.put("text", nowMeal);
+
+        Map<String, Object> simpleTextWrapper = new HashMap<>();
+        simpleTextWrapper.put("simpleText", simpleText);
+
+        List<Object> outputs = new ArrayList(1);
+        outputs.add(simpleTextWrapper);
+
+        Map<String, Object> template = new HashMap<>();
+        template.put("outputs", outputs);
+
+        Map<String, Object> responseBody = new HashMap<>();
+        responseBody.put("version", "2.0");
+        responseBody.put("template", template);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String result = objectMapper.writeValueAsString(responseBody);
+
+        return result;
     }
 
     @PostMapping("/speckor")
-    public Map<String, Object> readSpecKorMeal(@RequestBody Map<String, Map<String, Map<String, String>>> requestBody) throws JsonProcessingException {
+    public @ResponseBody String readSpecKorMeal() throws JsonProcessingException {
         // input : 날짜요일내일 + 아점저 + 1/2학
         // output : 한국어 식단이 포함된 JSON (단, JSON은 카톡 서버가 받을 수 있는 형식이여야 함.)
 
-        Map<String, Map<String, String>> action = requestBody.get("action");
-        Map<String, String> params = action.get("params");
-        String dateCustom = params.get("dateCustom");
-        String bld = params.get("bld");
+        // TODO 아래 기능 구현해 주세요.
+        String specMeal = mealService.getSpecKorMeal();
 
-        log.info(dateCustom + " " + bld);
+        // Response Body Construct
+        // TODO 더 좋은 방식이 있으면 구현해 주세요. ex) dto 이용.
+        // const responseBody = {
+        //          version: "2.0",
+        //          template: {
+        //              outputs: [
+        //                          {
+        //                              simpleText: {
+        //                                      text: specMeal
+        //                                  }
+        //                           }
+        //                        ]
+        //                     }
+        //                  };
 
-        String specMeal = mealService.getSpecKorMeal(dateCustom, bld);
-        Map<String, Object> responseBody = mealService.responseMeal(specMeal);
+        Map<String, Object> simpleText =  new HashMap<>();
+        simpleText.put("text", specMeal);
 
-        // if need to stratify.
-        // ObjectMapper objectMapper = new ObjectMapper();
-        // String result = objectMapper.writeValueAsString(responseBody);
+        Map<String, Object> simpleTextWrapper = new HashMap<>();
+        simpleTextWrapper.put("simpleText", simpleText);
 
-        return responseBody;
+        List<Object> outputs = new ArrayList(1);
+        outputs.add(simpleTextWrapper);
+
+        Map<String, Object> template = new HashMap<>();
+        template.put("outputs", outputs);
+
+        Map<String, Object> responseBody = new HashMap<>();
+        responseBody.put("version", "2.0");
+        responseBody.put("template", template);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String result = objectMapper.writeValueAsString(responseBody);
+
+        return result;
     }
 
     @PostMapping("/speceng")
-    public Map<String, Object> readSpecEngMeal(@RequestBody Map<String, Map<String, Map<String, String>>> requestBody) throws JsonProcessingException {
+    public @ResponseBody String readSpecEngMeal() throws JsonProcessingException {
         // input : 날짜요일내일 + 아점저 + 1/2학
         // output : 영어 식단이 포함된 JSON (단, JSON은 카톡 서버가 받을 수 있는 형식이여야 함.)
 
-        Map<String, Map<String, String>> action = requestBody.get("action");
-        Map<String, String> params = action.get("params");
-        String dateCustom = params.get("dateCustom");
-        String bld = params.get("bld");
+        // TODO 아래 기능 구현해 주세요.
+        String specMeal = mealService.getSpecEngMeal();
 
-        log.info(dateCustom + " " + bld);
+        // Response Body Construct
+        // TODO 더 좋은 방식이 있으면 구현해 주세요. ex) dto 이용.
+        // const responseBody = {
+        //          version: "2.0",
+        //          template: {
+        //              outputs: [
+        //                          {
+        //                              simpleText: {
+        //                                      text: specMeal
+        //                                  }
+        //                           }
+        //                        ]
+        //                     }
+        //                  };
 
-        String specMeal = mealService.getSpecEngMeal(dateCustom, bld);
-        Map<String, Object> responseBody = mealService.responseMeal(specMeal);
+        Map<String, Object> simpleText =  new HashMap<>();
+        simpleText.put("text", specMeal);
 
-        // if need to stratify.
-        // ObjectMapper objectMapper = new ObjectMapper();
-        // String result = objectMapper.writeValueAsString(responseBody);
+        Map<String, Object> simpleTextWrapper = new HashMap<>();
+        simpleTextWrapper.put("simpleText", simpleText);
 
-        return responseBody;
+        List<Object> outputs = new ArrayList(1);
+        outputs.add(simpleTextWrapper);
+
+        Map<String, Object> template = new HashMap<>();
+        template.put("outputs", outputs);
+
+        Map<String, Object> responseBody = new HashMap<>();
+        responseBody.put("version", "2.0");
+        responseBody.put("template", template);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String result = objectMapper.writeValueAsString(responseBody);
+
+        return result;
     }
 }
