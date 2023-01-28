@@ -39,6 +39,19 @@ public class SqlMealRepository implements MealRepository {
         return Optional.ofNullable(meal);
     }
 
+    public Optional<Meal> findByDate(Integer bldgType, Integer langType, Integer kindType, String date) {
+        List<Meal> result = em.createQuery("select m from Meal m where " +
+                        "m.bldgType = :bldgType and m.langType = :langType and m.kindType = :kindType " +
+                        "and m.date = :date", Meal.class)
+                .setParameter("bldgType", bldgType)
+                .setParameter("langType", langType)
+                .setParameter("kindType", kindType)
+                .setParameter("date", date)
+                .getResultList();
+
+        return result.stream().findAny();
+    }
+
     @Override
     public Long delete(Long mealId) {
         return null;
