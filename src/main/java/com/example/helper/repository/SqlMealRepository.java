@@ -33,6 +33,18 @@ public class SqlMealRepository implements MealRepository {
         return result.stream().findAny();
     }
 
+    public Optional<Meal> findByDate(Integer bldgType, Integer langType, Integer kindType, String date) {
+        List<Meal> result = em.createQuery("select m from Meal m where " +
+                        "m.bldgType = :bldgType and m.langType = :langType and m.kindType = :kindType " +
+                        "and m.date = :date", Meal.class)
+                .setParameter("bldgType", bldgType)
+                .setParameter("langType", langType)
+                .setParameter("kindType", kindType)
+                .setParameter("date", date)
+                .getResultList();
+        return result.stream().findAny();
+    }
+
     @Override
     public Optional<Meal> findById(Long mealId) {
         Meal meal = em.find(Meal.class, mealId);
